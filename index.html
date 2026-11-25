@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="An original, local-search OSCP preparation command reference.">
+  <title>OSCP command cheatsheet</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./data.js"></script>
+  <script defer src="./workflow.js"></script>
+  <script defer src="./custom-data.js"></script>
+  <script defer src="./custom.js"></script>
+  <script defer src="./search.js"></script>
+  <script defer src="./variables.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body id="top">
+  <a class="skip" href="#results">Skip to results</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top">
+        <span class="element-mark" aria-hidden="true"><small>55</small>Cs</span>
+        <span class="brand-copy">
+          <span>cheatsheet <span class="repo-divider">/</span> <strong>OSCP</strong></span>
+          <span class="author" aria-label="Author: Tonycrypter">
+            <span aria-hidden="true">by</span>
+            <span class="author-name" aria-hidden="true">Tony<span class="author-element"><small>24</small>cr</span>ypter</span>
+          </span>
+        </span>
+      </a>
+      <div class="header-actions">
+        <button id="theme-toggle" type="button">Light theme</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="title">
+      <h1 id="title">OSCP command cheatsheet</h1>
+      <p>Choose a service or tool, or search. Replace <code>&lt;PLACEHOLDERS&gt;</code> before use.</p>
+      <p id="custom-error" class="field-error" role="alert" hidden></p>
+      <p id="filter-status" class="sr-only" role="status" aria-live="polite"></p>
+    </section>
+    <section class="search-controls" aria-label="Search and filters">
+      <div class="toolbar">
+        <div class="search-field"><label for="search">Search</label><input id="search" type="search" placeholder="Tool, command, or use..." autocomplete="off" spellcheck="false"></div>
+        <div class="service-field"><label for="service">Service</label><select id="service"><option value="all">All services</option></select></div>
+        <div class="tool-field"><label for="tool">Tool</label><select id="tool"><option value="All tools">All tools</option></select></div>
+        <div class="stage-field"><label for="stage">Stage</label><select id="stage"><option value="all">All stages</option></select></div>
+      </div>
+      <div class="filter-actions">
+        <p class="hint">Press <kbd>/</kbd> to search.</p>
+        <button id="reset" type="button">Reset filters</button>
+      </div>
+    </section>
+    <section class="finding-guide" aria-label="Finding to next check" data-selected="false">
+      <details id="guide-panel">
+        <summary>Finding &rarr; next check</summary>
+        <div class="guide-controls">
+          <div><label for="finding">What did you find?</label><select id="finding"><option value="">Choose your observation</option></select></div>
+          <button id="reset-finding" type="button">Clear guide</button>
+        </div>
+        <p class="hint">Choose your observation. Read one check at a time; nothing advances automatically.</p>
+        <div id="finding-output" hidden></div>
+      </details>
+    </section>
+    <details id="values-panel" class="command-values">
+      <summary>Target / connection values <span class="optional">(optional; not saved)</span></summary>
+      <fieldset class="variables">
+        <legend>Command values <span class="optional">(optional)</span></legend>
+        <div class="variable-fields">
+          <div><label for="target">Target IP / FQDN</label><input id="target" type="text" placeholder="192.0.2.10 or app.corp.example" autocomplete="off" spellcheck="false" aria-describedby="target-error"><p id="target-error" class="field-error" hidden></p></div>
+          <div><label for="listener">VPN / listener IPv4</label><input id="listener" type="text" placeholder="192.0.2.20" autocomplete="off" spellcheck="false" aria-describedby="listener-error"><p id="listener-error" class="field-error" hidden></p></div>
+          <div><label for="dc">DC / AD IP or FQDN</label><input id="dc" type="text" placeholder="192.0.2.30 or dc.corp.example" autocomplete="off" spellcheck="false" aria-describedby="dc-error"><p id="dc-error" class="field-error" hidden></p></div>
+          <div><label for="domain">AD DNS domain name</label><input id="domain" type="text" placeholder="corp.example" autocomplete="off" spellcheck="false" aria-describedby="domain-error"><p id="domain-error" class="field-error" hidden></p></div>
+        </div>
+        <details class="value-help">
+          <summary>How placeholders work</summary>
+          <p class="hint">Values update matching commands and copies locally; nothing is saved or sent. DC also fills DNS server; domain fills LDAP base DN. Ports, users, pivot hosts, and other placeholders stay manual. IPv6 is not supported by these templates.</p>
+          <p class="hint">A DC IP does not infer its TLS hostname; DNS options requiring a literal IP stay manual when the DC is a hostname. A target FQDN fills hostname templates but leaves the IP in curl --resolve for you to supply.</p>
+        </details>
+        <div class="variable-actions"><button id="clear-values" type="button">Clear values</button><p id="variables-status" role="status" aria-live="polite">Replace any remaining &lt;PLACEHOLDERS&gt; before running.</p></div>
+      </fieldset>
+    </details>
+    <div class="reference-layout">
+      <section id="results" tabindex="-1" aria-labelledby="results-title">
+      <div class="results-heading">
+        <h2 id="results-title">Commands</h2>
+        <div class="result-controls">
+          <p id="count" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div id="entries"></div>
+      <nav id="entry-navigation" class="entry-navigation" aria-label="Matching command entries" hidden>
+        <div><label for="entry-choice">Choose a matching entry</label><select id="entry-choice"></select></div>
+        <div class="reading-buttons">
+          <button id="previous-entry" type="button">Previous entry</button>
+          <button id="next-entry" type="button">Next entry</button>
+        </div>
+      </nav>
+      <div id="start"><p>Choose a service or tool, or enter a search to see matching commands.</p></div>
+      <div id="empty" hidden><h3>No matching commands</h3><p>Try fewer search words, choose All stages, or reset the filters.</p></div>
+      </section>
+    </div>
+  </main>
+  <p id="copy-status" class="sr-only" role="status" aria-live="polite"></p>
+  <noscript><p>Enable JavaScript for local search and the command list. No network requests are required.</p></noscript>
+</body>
+</html>
